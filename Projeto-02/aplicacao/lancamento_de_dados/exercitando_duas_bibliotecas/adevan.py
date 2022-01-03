@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pygal
 from passeio_aleatorio import Passeio_Aleatorio
 from dado import Dado
 
@@ -19,9 +20,22 @@ possiveis=list(range(1,d1.numero_lados+1))
 for i in range(1,d1.numero_lados+1):
     frequencias.append(resultados.count(i))
 
+plt.figure(figsize=(10,6))
 plt.plot(possiveis,frequencias,c='green')
 plt.title("Frequências de lados em um dado de 22 com 100 lançamentos")
 plt.xlabel("Lados",fontsize=12)
 plt.ylabel("frequência de lados")
 plt.savefig('aplicacao/lancamento_de_dados/exercitando_duas_bibliotecas/imagens/dadosMatplotlib.png')
 plt.show()
+
+pa.calcular_passeio()
+
+listaPontos=[]
+for i in range(1200):
+    tup=(pa.x_valores[i],pa.y_valores[i])
+    listaPontos.append(tup)
+tabela=pygal.XY(stroke=False)
+tabela.title="Passeio Aleatório com 1200 pontos"
+tabela.add("Pontos",listaPontos)
+tabela.render_to_file("aplicacao/lancamento_de_dados/exercitando_duas_bibliotecas/imagens/passeio.svg")
+tabela.render()
