@@ -15,9 +15,9 @@ def run_game(dados):
 
     #Cria uma espaçonave
     if(dados["nomePersonagem"].lower()=='pacman'):
-        person=Pacman(screen)
+        person=Pacman(screen,ai_settings)
     else:
-        person=Ship(screen)
+        person=Ship(screen,ai_settings)
 
     # Inicializa o laço principal do jogo
     while True:

@@ -2,9 +2,12 @@ import sys
 
 import sys
 import pygame
+from pacman import Pacman
 
-def check_events(obj):
-    '''Responde a eventos de pressionamento de teclas e de mouse.'''
+#Função check_events() está muito grande, dividiremos em check_keydown_events e check_keyup_events
+
+'''def check_events(obj):
+    Responde a eventos de pressionamento de teclas e de mouse.
     # Laço de eventos capturados por teclado
     for event in pygame.event.get():
         if(event.type==pygame.QUIT):
@@ -20,15 +23,53 @@ def check_events(obj):
             if event.key==pygame.K_RIGHT:
                 obj.moving_right=False
             if(event.key==pygame.K_LEFT):
-                obj.moving_left=False
-                
+                obj.moving_left=False'''
 
-def update_screen(ai_settings,screen,ship):
+def check_events(obj):
+    '''Responde a eventos de pressionamento de teclas e de mouse.'''
+    # Laço de eventos capturados por teclado
+    for event in pygame.event.get():
+        if(event.type==pygame.QUIT):
+            sys.exit()
+        elif(event.type==pygame.KEYDOWN):
+            check_keydown_events(event,obj)
+        elif(event.type==pygame.KEYUP):
+            check_keyup_events(event,obj)
+
+def check_keydown_events(event,obj):
+    '''Responde a pressionamentos de tecla.'''
+    if(event.key==pygame.K_RIGHT):
+        # Move a espaçonave para a direita
+        obj.moving_right=True
+    elif(event.key==pygame.K_LEFT):
+        # Move a espaçonave para a esquerda
+        obj.moving_left=True
+    elif(event.key==pygame.K_UP and(isinstance(obj,Pacman))):
+        #Ao verificar que o personagem é uma instância de pacman, posso tranquilamente
+        #editar o atributo de moving_up
+        obj.moving_up=True
+    elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
+        obj.moving_down=True
+                
+def check_keyup_events(event,obj):
+    '''Responde a soltamentos de tecla.'''
+    if event.key==pygame.K_RIGHT:
+        obj.moving_right=False
+    elif(event.key==pygame.K_LEFT):
+        obj.moving_left=False
+    elif(event.key==pygame.K_UP and(isinstance(obj,Pacman))):
+        #Ao verificar que o personagem é uma instância de pacman, posso tranquilamente
+        #editar o atributo de moving_up
+        obj.moving_up=False
+    elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
+        obj.moving_down=False
+
+def update_screen(ai_settings,screen,obj):
     '''Atualiza as imagens em tela e alterna para a nova tela.'''
 
     #Redesenha a tela a cada passgem pelo laço
     screen.fill(ai_settings.bg_color)
-    ship.blitme()
+    obj.blitme()
 
     #Deixa a tela mais recente visível
     pygame.display.flip()

@@ -18,8 +18,6 @@ plt.scatter(pa.x_valores,pa.y_valores,c=intervalo,cmap=plt.cm.Blues,s=7,edgecolo
 plt.scatter(0,0,c='green',s=23,edgecolor='none')
 plt.scatter(pa.x_valores[-1],pa.y_valores[-1],c='red',s=23,edgecolor='none')
 plt.title("Passeio Aleatório com 5000 pontos e colorMap !",fontsize=12)
-if(os.path.exists("aplicacao/imagensPasseio/PasseioColorMap.png")):
-    os.remove("aplicacao/imagensPasseio/PasseioColorMap.png")
 plt.savefig("aplicacao/imagensPasseio/PasseioColorMap.png",bbox_inches="tight")
 plt.show()
 

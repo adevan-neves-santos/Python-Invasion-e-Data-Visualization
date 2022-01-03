@@ -14,7 +14,9 @@ print(frequencias)
 
 hist=pygal.Bar()
 hist.title="Resultados para 1000 lançamentos de um dado de seis lados."
-hist.x_labels=['1','2','3','4','5','6']
+#Usar list com list comprehensions,
+#hist.x_labels=['1','2','3','4','5','6']
+hist.x_labels=[str(elem) for elem in (list(range(1,7)))]
 hist.x_title='Resultado'
 hist.y_title="Frequência de resultado"
 hist.add("D6",frequencias)

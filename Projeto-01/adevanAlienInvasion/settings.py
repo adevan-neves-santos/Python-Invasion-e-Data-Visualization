@@ -6,3 +6,6 @@ class Settings():
         self.screen_height=600
         #Cor RGB da tela no jogo
         self.bg_color=gf.get_cor(cor)
+
+        #Configurações do personagem
+        self.person_speed_factor=1.5

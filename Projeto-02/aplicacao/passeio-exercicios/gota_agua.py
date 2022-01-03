@@ -34,8 +34,6 @@ plt.plot(pa.x_valores,pa.y_valores,linewidth=1)
 plt.title("Percurso de um grão de polén ")
 plt.xlabel("Eixo horizontal ")
 plt.ylabel("Eixo vertical ")
-if(os.path.exists("aplicacao/passeio-exercicios/imagens/Polen.png")):
-    os.remove("aplicacao/passeio-exercicios/imagens/Polen.png")
 plt.savefig("aplicacao/passeio-exercicios/imagens/Polen.png")
 plt.show()
 

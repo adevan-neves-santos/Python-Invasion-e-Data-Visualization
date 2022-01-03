@@ -16,7 +16,11 @@ for i in range(2,resultado_maximo+1):
 
 hist=pygal.Bar()
 hist.title="Resultado de 1000 lançamentos de dois dados simultâneos"
-hist.x_labels=['1','2','3','4','5','6','7','8','9','10','11','12']
+
+#Usar list com list comprehensions,
+#hist.x_labels=['1','2','3','4','5','6','7','8','9','10','11','12']
+
+hist.x_labels=[str(elem) for elem in (list(range(1,13)))]
 hist.x_title="Resultados"
 hist.y_title="Frequência de resultado"
 hist.add("D6+D6",frequencias)
