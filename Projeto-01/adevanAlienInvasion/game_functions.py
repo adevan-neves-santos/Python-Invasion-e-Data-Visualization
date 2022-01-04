@@ -5,39 +5,18 @@ import pygame
 from pacman import Pacman
 from bullet import Bullet
 
-#Função check_events() está muito grande, dividiremos em check_keydown_events e check_keyup_events
-
-'''def check_events(obj):
-    Responde a eventos de pressionamento de teclas e de mouse.
-    # Laço de eventos capturados por teclado
-    for event in pygame.event.get():
-        if(event.type==pygame.QUIT):
-            sys.exit()
-        elif(event.type==pygame.KEYDOWN):
-            if(event.key==pygame.K_RIGHT):
-                # Move a espaçonave para a direita
-                obj.moving_right=True
-            elif(event.key==pygame.K_LEFT):
-                # Move a espaçonave para a esquerda
-                obj.moving_left=True
-        elif(event.type==pygame.KEYUP):
-            if event.key==pygame.K_RIGHT:
-                obj.moving_right=False
-            if(event.key==pygame.K_LEFT):
-                obj.moving_left=False'''
-
-def check_events(ai_settings,screen,obj,bullets):
+def check_events(ai_settings,screen,obj,bullets,eh_pacman):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
     # Laço de eventos capturados por teclado
     for event in pygame.event.get():
         if(event.type==pygame.QUIT):
             sys.exit()
         elif(event.type==pygame.KEYDOWN):
-            check_keydown_events(event,ai_settings,screen,obj,bullets)
+            check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman)
         elif(event.type==pygame.KEYUP):
-            check_keyup_events(event,obj)
+            check_keyup_events(event,obj,eh_pacman)
 
-def check_keydown_events(event,ai_settings,screen,obj,bullets):
+def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman):
     '''Responde a pressionamentos de tecla.'''
     if(event.key==pygame.K_RIGHT):
         # Move a espaçonave para a direita
@@ -45,16 +24,16 @@ def check_keydown_events(event,ai_settings,screen,obj,bullets):
     elif(event.key==pygame.K_LEFT):
         # Move a espaçonave para a esquerda
         obj.moving_left=True
-    elif(event.key==pygame.K_UP and(isinstance(obj,Pacman))):
+    elif(event.key==pygame.K_UP and(eh_pacman)):
         #Ao verificar que o personagem é uma instância de pacman, posso tranquilamente
         #editar o atributo de moving_up
         obj.moving_up=True
-    elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
+    elif(event.key==pygame.K_DOWN and (eh_pacman)):
         obj.moving_down=True
     elif(event.key==pygame.K_SPACE):
-        fire_bullet(ai_settings,screen,obj,bullets)
+        fire_bullet(ai_settings,screen,obj,bullets,eh_pacman)
 
-def fire_bullet(ai_settings,screen,obj,bullets):
+def fire_bullet(ai_settings,screen,obj,bullets,eh_pacman):
     '''Dispara um projétil se o limite ainda não foi alcançado.'''
     #Cria um novo projétil e o adiciona ao grupo de projéteis, limitado apenas
     #pelo número máximo de projéteis em tela
@@ -63,17 +42,17 @@ def fire_bullet(ai_settings,screen,obj,bullets):
         bullets.add(new_bullet)
 
                 
-def check_keyup_events(event,obj):
+def check_keyup_events(event,obj,eh_pacman):
     '''Responde a soltamentos de tecla.'''
     if event.key==pygame.K_RIGHT:
         obj.moving_right=False
     elif(event.key==pygame.K_LEFT):
         obj.moving_left=False
-    elif(event.key==pygame.K_UP and(isinstance(obj,Pacman))):
+    elif(event.key==pygame.K_UP and(eh_pacman)):
         #Ao verificar que o personagem é uma instância de pacman, posso tranquilamente
         #editar o atributo de moving_up
         obj.moving_up=False
-    elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
+    elif(event.key==pygame.K_DOWN and (eh_pacman)):
         obj.moving_down=False
 
 def update_screen(ai_settings,screen,obj,bullets):
