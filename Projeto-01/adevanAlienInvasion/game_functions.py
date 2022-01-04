@@ -3,6 +3,7 @@ import sys
 import sys
 import pygame
 from pacman import Pacman
+from bullet import Bullet
 
 #Função check_events() está muito grande, dividiremos em check_keydown_events e check_keyup_events
 
@@ -25,18 +26,18 @@ from pacman import Pacman
             if(event.key==pygame.K_LEFT):
                 obj.moving_left=False'''
 
-def check_events(obj):
+def check_events(ai_settings,screen,obj,bullets):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
     # Laço de eventos capturados por teclado
     for event in pygame.event.get():
         if(event.type==pygame.QUIT):
             sys.exit()
         elif(event.type==pygame.KEYDOWN):
-            check_keydown_events(event,obj)
+            check_keydown_events(event,ai_settings,screen,obj,bullets)
         elif(event.type==pygame.KEYUP):
             check_keyup_events(event,obj)
 
-def check_keydown_events(event,obj):
+def check_keydown_events(event,ai_settings,screen,obj,bullets):
     '''Responde a pressionamentos de tecla.'''
     if(event.key==pygame.K_RIGHT):
         # Move a espaçonave para a direita
@@ -50,6 +51,17 @@ def check_keydown_events(event,obj):
         obj.moving_up=True
     elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
         obj.moving_down=True
+    elif(event.key==pygame.K_SPACE):
+        fire_bullet(ai_settings,screen,obj,bullets)
+
+def fire_bullet(ai_settings,screen,obj,bullets):
+    '''Dispara um projétil se o limite ainda não foi alcançado.'''
+    #Cria um novo projétil e o adiciona ao grupo de projéteis, limitado apenas
+    #pelo número máximo de projéteis em tela
+    if(len(bullets)<ai_settings.bullets_allowed):
+        new_bullet=Bullet(ai_settings,screen,obj)
+        bullets.add(new_bullet)
+
                 
 def check_keyup_events(event,obj):
     '''Responde a soltamentos de tecla.'''
@@ -64,17 +76,31 @@ def check_keyup_events(event,obj):
     elif(event.key==pygame.K_DOWN and (isinstance(obj,Pacman))):
         obj.moving_down=False
 
-def update_screen(ai_settings,screen,obj):
+def update_screen(ai_settings,screen,obj,bullets):
     '''Atualiza as imagens em tela e alterna para a nova tela.'''
 
-    #Redesenha a tela a cada passgem pelo laço
+    #Redesenha a tela a cada passagem pelo laço
     screen.fill(ai_settings.bg_color)
+
+    #Redesenha todos os projéteis atrás da espaçonave e dos alienígenas
+    for bullet in bullets.sprites():
+        bullet.draw_bullet()
+
     obj.blitme()
 
     #Deixa a tela mais recente visível
     pygame.display.flip()
 
+def update_bullets(bullets):
+    '''Atualiza  a posição dos projéteis e remove projéteis antigos.'''
+    bullets.update()
+    #Apagua bullet se ele sumir da tela, economizando o processento desnecessário
+    for bullet in bullets.copy():
+        if(bullet.rect.bottom<=0):
+            bullets.remove(bullet)
+
 def get_cor(cor):
+    '''Retorna um código RGB da cor desejada na tela de fundo jogo.'''
     if(cor.upper()=="AZUL"):
         return (135,206,235)
     elif(cor.upper()=="VERDE"):
@@ -82,4 +108,4 @@ def get_cor(cor):
     elif(cor.upper()=="CINZA"):
         return (230,230,230)
     else:
-        return (255,228,225)
+        return (255,228,100)

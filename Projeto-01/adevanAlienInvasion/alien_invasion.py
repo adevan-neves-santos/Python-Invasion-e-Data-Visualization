@@ -4,6 +4,8 @@ from settings import Settings
 from ship import Ship
 from pacman import Pacman
 from input_output import ler_dados
+from pygame.sprite import Group
+from bullet import Bullet
 
 def run_game(dados):
     # Inicializa as configurações em segundo plano
@@ -18,12 +20,15 @@ def run_game(dados):
         person=Pacman(screen,ai_settings)
     else:
         person=Ship(screen,ai_settings)
+    #Cria um grupo na qual serão armazenados os projéteis
+    bullets=Group()
 
     # Inicializa o laço principal do jogo
     while True:
-        gf.check_events(person)
+        gf.check_events(ai_settings,screen,person,bullets)
         person.update()
-        gf.update_screen(ai_settings,screen,person)
+        gf.update_bullets(bullets)
+        gf.update_screen(ai_settings,screen,person,bullets)
 
 dados=ler_dados()
 run_game(dados)
