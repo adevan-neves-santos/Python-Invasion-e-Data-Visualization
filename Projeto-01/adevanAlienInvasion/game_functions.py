@@ -35,6 +35,8 @@ def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman):
         fire_bullet(ai_settings,screen,obj,bullets,eh_pacman)
     elif(event.key==pygame.K_3 and (eh_pacman)):
         fire_bullet2(ai_settings,screen,obj,bullets,eh_pacman)
+    elif(event.key==pygame.K_q):
+        sys.exit()
 
 def fire_bullet(ai_settings,screen,obj,bullets,eh_pacman):
     '''Dispara um projétil se o limite ainda não foi alcançado.'''
