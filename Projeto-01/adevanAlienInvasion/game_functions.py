@@ -2,6 +2,7 @@ import sys
 
 import sys
 import pygame
+from bullet_lateral import BulletLateral
 from pacman import Pacman
 from bullet import Bullet
 
@@ -32,6 +33,8 @@ def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman):
         obj.moving_down=True
     elif(event.key==pygame.K_SPACE):
         fire_bullet(ai_settings,screen,obj,bullets,eh_pacman)
+    elif(event.key==pygame.K_3 and (eh_pacman)):
+        fire_bullet2(ai_settings,screen,obj,bullets,eh_pacman)
 
 def fire_bullet(ai_settings,screen,obj,bullets,eh_pacman):
     '''Dispara um projétil se o limite ainda não foi alcançado.'''
@@ -39,6 +42,14 @@ def fire_bullet(ai_settings,screen,obj,bullets,eh_pacman):
     #pelo número máximo de projéteis em tela
     if(len(bullets)<ai_settings.bullets_allowed):
         new_bullet=Bullet(ai_settings,screen,obj)
+        bullets.add(new_bullet)
+
+def fire_bullet2(ai_settings,screen,obj,bullets,eh_pacman):
+    '''Dispara um projétil lateral para a direita se o limite ainda não foi alcançado.'''
+    #Cria um novo projétil e o adiciona ao grupo de projéteis, limitado apenas
+    #pelo número máximo de projéteis laterais, que é 2.
+    if(len(bullets)<2):
+        new_bullet=BulletLateral(ai_settings,screen,obj)
         bullets.add(new_bullet)
 
                 
@@ -70,12 +81,12 @@ def update_screen(ai_settings,screen,obj,bullets):
     #Deixa a tela mais recente visível
     pygame.display.flip()
 
-def update_bullets(bullets):
+def update_bullets(bullets,screen):
     '''Atualiza  a posição dos projéteis e remove projéteis antigos.'''
     bullets.update()
     #Apagua bullet se ele sumir da tela, economizando o processento desnecessário
     for bullet in bullets.copy():
-        if(bullet.rect.bottom<=0):
+        if((bullet.rect.bottom<=0) or (bullet.rect.right>=screen.right)):
             bullets.remove(bullet)
 
 def get_cor(cor):

@@ -31,7 +31,7 @@ def run_game(dados):
     while True:
         gf.check_events(ai_settings,screen,person,bullets,eh_pacman)
         person.update()
-        gf.update_bullets(bullets)
+        gf.update_bullets(bullets,screen.get_rect())
         gf.update_screen(ai_settings,screen,person,bullets)
 
 dados=ler_dados()

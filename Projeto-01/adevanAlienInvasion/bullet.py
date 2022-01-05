@@ -7,11 +7,12 @@ class Bullet(Sprite):
     def __init__(self, ai_settings,screen,obj):
         super().__init__()
         self.screen=screen
+        self.obj=obj
         #Cria um retângulo para o projétil em (0,0) e, em seguida, define
         # a posição correta
         self.rect=pygame.Rect(0,0,ai_settings.bullet_width,ai_settings.bullet_height)
-        self.rect.centerx=obj.rect.centerx
-        self.rect.top=obj.rect.top
+        self.rect.centerx=self.obj.rect.centerx
+        self.rect.top=self.obj.rect.top
 
         #Armazena a posição do projétil como um valor decimal
         self.y=float(self.rect.y)
