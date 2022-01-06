@@ -96,13 +96,16 @@ def update_stars(constellation,screen,ai_settings):
             constellation.remove(star)
 
 
-def update_bullets(bullets,screen):
+def update_bullets(bullets,screen,aliens):
     '''Atualiza  a posição dos projéteis e remove projéteis antigos.'''
     bullets.update()
     #Apagua bullet se ele sumir da tela, economizando o processento desnecessário
     for bullet in bullets.copy():
         if((bullet.rect.bottom<=0) or (bullet.rect.right>=screen.right)):
             bullets.remove(bullet)
+    #Verifica se algum projétil atingiu os alienígenas
+    #Em caso afirmativo, livra-se do projétil e do alienígena
+    collisions=pygame.sprite.groupcollide(bullets,aliens,True,True)
 
 def get_cor(cor):
     '''Retorna um código RGB da cor desejada na tela de fundo jogo.'''

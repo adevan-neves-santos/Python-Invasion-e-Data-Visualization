@@ -43,7 +43,7 @@ def run_game(dados):
     while True:
         gf.check_events(ai_settings,screen,person,bullets,eh_pacman)
         person.update()
-        gf.update_bullets(bullets,screen.get_rect())
+        gf.update_bullets(bullets,screen.get_rect(),aliens)
         gf.update_stars(constellation,screen.get_rect(),ai_settings)
         gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation)
         gf.update_aliens(ai_settings,aliens)
