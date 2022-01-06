@@ -8,7 +8,10 @@ def gravar_dados():
         nome_personagem=input("Qual o nome do personagem ? ")
         cor_fundo=input("Qual a cor de fundo ? ")
         json.dump(
-            {'nomeJogador':nome_jogador,'nomePersonagem':nome_personagem,'corFundo':cor_fundo},
+            {'nomeJogador':nome_jogador
+            ,'nomePersonagem':nome_personagem
+            ,'corFundo':cor_fundo
+            },
             fl,
             indent=2)
 def ler_dados():

@@ -6,6 +6,7 @@ from bullet_lateral import BulletLateral
 from pacman import Pacman
 from bullet import Bullet
 from alien import Alien
+from star import Star
 
 def check_events(ai_settings,screen,obj,bullets,eh_pacman):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
@@ -69,7 +70,7 @@ def check_keyup_events(event,obj,eh_pacman):
     elif(event.key==pygame.K_DOWN and (eh_pacman)):
         obj.moving_down=False
 
-def update_screen(ai_settings,screen,obj,aliens,bullets):
+def update_screen(ai_settings,screen,obj,aliens,bullets,constellation):
     '''Atualiza as imagens em tela e alterna para a nova tela.'''
 
     #Redesenha a tela a cada passagem pelo laço
@@ -81,9 +82,19 @@ def update_screen(ai_settings,screen,obj,aliens,bullets):
 
     obj.blitme()
     aliens.draw(screen)
+    constellation.draw(screen)
 
     #Deixa a tela mais recente visível
     pygame.display.flip()
+
+def update_stars(constellation,screen,ai_settings):
+    '''Atualiza a posição de cada estrela cadente.'''
+    constellation.update()
+    ##Irá apagar a estrela assim que sumir da tela
+    for star in constellation.copy():
+        if(star.rect.top>=ai_settings.screen_height):
+            constellation.remove(star)
+
 
 def update_bullets(bullets,screen):
     '''Atualiza  a posição dos projéteis e remove projéteis antigos.'''
@@ -102,7 +113,7 @@ def get_cor(cor):
     elif(cor.upper()=="CINZA"):
         return (230,230,230)
     else:
-        return (255,228,100)
+        return (255,153,51)
     
 def create_fleet(ai_settings,screen,obj,aliens):
     '''Cria uma frota completa de alienígena em uma linha.'''
@@ -115,6 +126,11 @@ def create_fleet(ai_settings,screen,obj,aliens):
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):
             create_alien(ai_settings,screen,aliens,alien_number,row_number)
+
+def create_stars(ai_settings,screen,constellation):
+    for i in range(10):
+        new_star=Star(ai_settings,screen)
+        constellation.add(new_star)
 
 def get_number_aliens_x(ai_settings,alien_width):
     '''Determina o número de alienígenas que cabem em uma linha.'''
@@ -139,3 +155,25 @@ def get_number_rows(ai_settings,obj_height,alien_height):
     )
     number_rows=int(available_space_y/(2*alien_height))
     return number_rows
+
+def update_aliens(ai_settings,aliens):
+    '''
+    Verifica se a frota está em uma das bordas
+      e então atualiza as posições de todos os alienígenas da frota.
+    '''
+    check_fleet_edges(ai_settings,aliens)
+    aliens.update()
+
+def check_fleet_edges(ai_settings,aliens):
+    '''Responde apropriadamente se alguma alineígena alcançou a borda.'''
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(ai_settings,aliens)
+            break
+
+def change_fleet_direction(ai_settings,aliens):
+    '''Faz toda a frota descer e muda a sua direção.'''
+    for alien in aliens.sprites():
+        alien.rect.y+=ai_settings.fleet_drop_speed
+    ai_settings.fleet_direction*=-1
+
