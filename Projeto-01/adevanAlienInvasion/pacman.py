@@ -5,9 +5,10 @@ class Pacman(Ship):
     ,assim como se mover para direita e esquerad também.'''
     def __init__(self,screen,ai_settings):
         super().__init__(screen,ai_settings,'adevanAlienInvasion/imagens/pacman.bmp')
-        #Colocar o retângulo no centro da tela
+        '''Colocar o retângulo no centro da tela
+        Fiz esta mudança para poder continuar com o preenchimento da tela por aliens
         self.rect.centerx=self.screen_rect.centerx
-        self.rect.centery=self.screen_rect.centery
+        self.rect.centery=self.screen_rect.centery'''
 
         #flag de movimento para cima
         self.moving_up=False

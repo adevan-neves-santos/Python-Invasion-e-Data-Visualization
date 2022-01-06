@@ -5,6 +5,7 @@ import pygame
 from bullet_lateral import BulletLateral
 from pacman import Pacman
 from bullet import Bullet
+from alien import Alien
 
 def check_events(ai_settings,screen,obj,bullets,eh_pacman):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
@@ -68,7 +69,7 @@ def check_keyup_events(event,obj,eh_pacman):
     elif(event.key==pygame.K_DOWN and (eh_pacman)):
         obj.moving_down=False
 
-def update_screen(ai_settings,screen,obj,bullets):
+def update_screen(ai_settings,screen,obj,aliens,bullets):
     '''Atualiza as imagens em tela e alterna para a nova tela.'''
 
     #Redesenha a tela a cada passagem pelo laço
@@ -79,6 +80,7 @@ def update_screen(ai_settings,screen,obj,bullets):
         bullet.draw_bullet()
 
     obj.blitme()
+    aliens.draw(screen)
 
     #Deixa a tela mais recente visível
     pygame.display.flip()
@@ -101,3 +103,39 @@ def get_cor(cor):
         return (230,230,230)
     else:
         return (255,228,100)
+    
+def create_fleet(ai_settings,screen,obj,aliens):
+    '''Cria uma frota completa de alienígena em uma linha.'''
+    #Cria um alienígena e calcula o número de alienígenas em uma linha
+    alien=Alien(ai_settings,screen)
+    number_aliens_x=get_number_aliens_x(ai_settings,alien.rect.width)
+    number_rows=get_number_rows(ai_settings,obj.rect.height,alien.rect.height)
+
+    #Cria a frota de alienígena
+    for row_number in range(number_rows):
+        for alien_number in range(number_aliens_x):
+            create_alien(ai_settings,screen,aliens,alien_number,row_number)
+
+def get_number_aliens_x(ai_settings,alien_width):
+    '''Determina o número de alienígenas que cabem em uma linha.'''
+    available_space_x=ai_settings.screen_width-2*alien_width
+    number_aliens_x=int(available_space_x/(2*alien_width))
+    return number_aliens_x
+    
+def create_alien(ai_settings,screen,aliens,alien_number,row_number):
+    '''Cria uma alienígena e o posiciona na linha.'''
+    alien=Alien(ai_settings,screen)
+    alien_width=alien.rect.width
+    alien.x=alien_width+2*alien_width*alien_number
+    alien.rect.x=alien.x
+    alien.rect.y=alien.rect.height+2*alien.rect.height*row_number
+    aliens.add(alien)
+
+def get_number_rows(ai_settings,obj_height,alien_height):
+    '''Determina o número de linhas com alienígenas que cabem na tela.'''
+    available_space_y=(
+        ai_settings.screen_height -
+        (3*alien_height)-obj_height
+    )
+    number_rows=int(available_space_y/(2*alien_height))
+    return number_rows
