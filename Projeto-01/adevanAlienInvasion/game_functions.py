@@ -27,7 +27,7 @@ def obj_hit(ai_settings,stats,screen,obj,aliens,bullets):
         stats.game_active=False
         pygame.mouse.set_visible(True)
 
-def check_events(ai_settings,screen,obj,bullets,eh_pacman,play_button,stats,aliens):
+def check_events(ai_settings,screen,obj,bullets,eh_pacman,play_button,stats,aliens,sb):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
     # Laço de eventos capturados por teclado
     for event in pygame.event.get():
@@ -35,14 +35,14 @@ def check_events(ai_settings,screen,obj,bullets,eh_pacman,play_button,stats,alie
             sys.exit()
         elif(event.type==pygame.MOUSEBUTTONDOWN):
             mouse_x,mouse_y=pygame.mouse.get_pos()
-            check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets)
+            check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets,sb)
         elif(event.type==pygame.KEYDOWN):
-            check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens)
+            check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens,sb)
         elif(event.type==pygame.KEYUP):
             check_keyup_events(event,obj,eh_pacman)
 
 
-def run_game(stats,ai_settings,screen,obj,aliens,bullets):
+def run_game(stats,ai_settings,screen,obj,aliens,bullets,sb):
     '''Inicia um novo jogo quando o jogador clicar em Play.'''
     if  not stats.game_active:
         #Oculta o cursor do mouse
@@ -51,6 +51,11 @@ def run_game(stats,ai_settings,screen,obj,aliens,bullets):
         #Reinicia os dados estatísticos
         stats.reset_stats()
         stats.game_active=True
+
+        #Reinicia as imagens do painel de pontuação
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
 
         #Esvazia a lista de alienígenas e de projéteis
         aliens.empty()
@@ -61,16 +66,16 @@ def run_game(stats,ai_settings,screen,obj,aliens,bullets):
         obj.center_obj()
 
 
-def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets):
+def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets,sb):
     '''Inicia um novo jogo quando o jogador clicar em Play.'''
     button_clicked=play_button.rect.collidepoint(mouse_x,mouse_y)
     if button_clicked:
         #Reinicia as configurações do jogo
         ai_settings.initialize_dynamic_settings()
-        run_game(stats,ai_settings,screen,obj,aliens,bullets)
+        run_game(stats,ai_settings,screen,obj,aliens,bullets,sb)
 
 
-def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens):
+def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens,sb):
     '''Responde a pressionamentos de tecla.'''
     if(event.key==pygame.K_RIGHT):
         # Move a espaçonave para a direita
@@ -89,7 +94,7 @@ def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,al
     elif(event.key==pygame.K_3 and (eh_pacman)):
         fire_bullet2(ai_settings,screen,obj,bullets,eh_pacman)
     elif(event.key==pygame.K_p):
-        run_game(stats,ai_settings,screen,obj,aliens,bullets)
+        run_game(stats,ai_settings,screen,obj,aliens,bullets,sb)
     elif(event.key==pygame.K_q):
         sys.exit()
 
@@ -180,12 +185,18 @@ def check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets,stats,sb
 
             stats.score+=ai_settings.aliens_points*len(aliens)
             sb.prep_score()
+        check_high_score(stats,sb)
 
     if(len(aliens)==0):
         #Destrói os projéteis existentes, aumenta a velocidade do jogo e cri uma nova frota
 
         bullets.empty()
         ai_settings.increase_speed()
+
+        #Aumenta o nível
+        stats.level+=1
+        sb.prep_level()
+
         create_fleet(ai_settings,screen,obj,aliens)
 
 def get_cor(cor):
@@ -278,3 +289,8 @@ def change_fleet_direction(ai_settings,aliens):
         alien.rect.y+=ai_settings.fleet_drop_speed
     ai_settings.fleet_direction*=-1
 
+def check_high_score(stats,sb):
+    '''Verifica se há uma pontuação máxima.'''
+    if stats.score>stats.high_score:
+        stats.high_score=stats.score
+        sb.prep_high_score()

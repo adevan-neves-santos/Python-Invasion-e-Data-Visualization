@@ -34,3 +34,7 @@ class Pacman(Ship):
     
         self.rect.centerx=self.center
         self.rect.centery=self.centery
+    def center_obj(self):
+        '''Centraliza o pacman na tela.'''
+        self.centerx=self.screen_rect.centerx
+        self.centery=self.screen_rect.height-self.rect.height
