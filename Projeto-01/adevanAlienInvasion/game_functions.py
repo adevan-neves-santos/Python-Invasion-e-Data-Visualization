@@ -37,14 +37,14 @@ def check_events(ai_settings,screen,obj,bullets,eh_pacman,play_button,stats,alie
             mouse_x,mouse_y=pygame.mouse.get_pos()
             check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets)
         elif(event.type==pygame.KEYDOWN):
-            check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman)
+            check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens)
         elif(event.type==pygame.KEYUP):
             check_keyup_events(event,obj,eh_pacman)
 
-def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets):
+
+def run_game(stats,ai_settings,screen,obj,aliens,bullets):
     '''Inicia um novo jogo quando o jogador clicar em Play.'''
-    button_clicked=play_button.rect.collidepoint(mouse_x,mouse_y)
-    if button_clicked and not stats.game_active:
+    if  not stats.game_active:
         #Oculta o cursor do mouse
         pygame.mouse.set_visible(False)
 
@@ -60,7 +60,15 @@ def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,a
         create_fleet(ai_settings,screen,obj,aliens)
         obj.center_obj()
 
-def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman):
+
+def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,aliens,bullets):
+    '''Inicia um novo jogo quando o jogador clicar em Play.'''
+    button_clicked=play_button.rect.collidepoint(mouse_x,mouse_y)
+    if button_clicked:
+        run_game(stats,ai_settings,screen,obj,aliens,bullets)
+
+
+def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman,stats,aliens):
     '''Responde a pressionamentos de tecla.'''
     if(event.key==pygame.K_RIGHT):
         # Move a espaçonave para a direita
@@ -78,6 +86,8 @@ def check_keydown_events(event,ai_settings,screen,obj,bullets,eh_pacman):
         fire_bullet(ai_settings,screen,obj,bullets,eh_pacman)
     elif(event.key==pygame.K_3 and (eh_pacman)):
         fire_bullet2(ai_settings,screen,obj,bullets,eh_pacman)
+    elif(event.key==pygame.K_p):
+        run_game(stats,ai_settings,screen,obj,aliens,bullets)
     elif(event.key==pygame.K_q):
         sys.exit()
 
