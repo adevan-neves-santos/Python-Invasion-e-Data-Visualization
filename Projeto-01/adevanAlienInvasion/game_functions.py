@@ -1,12 +1,30 @@
 import sys
-
-import sys
 import pygame
 from bullet_lateral import BulletLateral
 from pacman import Pacman
 from bullet import Bullet
 from alien import Alien
 from star import Star
+from time import sleep
+
+def obj_hit(ai_settings,stats,screen,obj,aliens,bullets):
+    '''Responde ao fato de a espaçonave ter sido atingida por um alienígena.'''
+    if(stats.obj_left>0):
+        #Decrementa obj_left
+        stats.obj_left-=1
+
+        #Esvazia a lista de alienígenas e de projéteis.
+        aliens.empty()
+        bullets.empty()
+
+        #Cria uma nova frota e centraliza a espaçonave
+        create_fleet(ai_settings,screen,obj,aliens)
+        obj.center_obj()
+
+        #Faz uma pausa
+        sleep(0.5)
+    else:
+        stats.game_active=False
 
 def check_events(ai_settings,screen,obj,bullets,eh_pacman):
     '''Responde a eventos de pressionamento de teclas e de mouse.'''
@@ -94,6 +112,10 @@ def update_stars(constellation,screen,ai_settings):
     for star in constellation.copy():
         if(star.rect.top>=ai_settings.screen_height):
             constellation.remove(star)
+    if(len(constellation)==0):
+        for i in range(10):
+            new_star=Star(ai_settings,screen)
+            constellation.add(new_star)
 
 
 def update_bullets(bullets,screen,aliens,ai_settings,obj):
@@ -105,10 +127,15 @@ def update_bullets(bullets,screen,aliens,ai_settings,obj):
             bullets.remove(bullet)
     #Verifica se algum projétil atingiu os alienígenas
     #Em caso afirmativo, livra-se do projétil e do alienígena
-    collisions=pygame.sprite.groupcollide(bullets,aliens,True,True)
+    check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets)
+
+def check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets):
+    '''Responde a colisões entre projéteis e alienígenas.'''
+    #Remove todo par projetil-nave quando colidem (sobrepoem)
+    collision=pygame.sprite.groupcollide(bullets,aliens,True,True)
 
     if(len(aliens)==0):
-        #Destrói os projéteis existentes e cria uma nova frota
+        #Destrói os projéteis existentes e cria uma nova
         bullets.empty()
         create_fleet(ai_settings,screen,obj,aliens)
 
@@ -164,13 +191,30 @@ def get_number_rows(ai_settings,obj_height,alien_height):
     number_rows=int(available_space_y/(2*alien_height))
     return number_rows
 
-def update_aliens(ai_settings,aliens):
+def check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets):
+    '''Verifica se algum alienígena alcançou a parte inferior da tela.'''
+    screen_rect=screen.get_rect()
+
+    for alien in aliens.sprites():
+        if(alien.rect.bottom>=screen_rect.bottom):
+            #Trata esse caso do mesmo modo que é feito quando a espaçonave é atinginda.
+            obj_hit(ai_settings,stats,screen,obj,aliens,bullets)
+            break
+
+def update_aliens(ai_settings,aliens,obj,stats,screen,bullets):
     '''
     Verifica se a frota está em uma das bordas
       e então atualiza as posições de todos os alienígenas da frota.
     '''
     check_fleet_edges(ai_settings,aliens)
     aliens.update()
+
+    #Verifica se houve colisões entre alienígenas e a espaçonave
+    if pygame.sprite.spritecollideany(obj,aliens):
+        obj_hit(ai_settings,stats,screen,obj,aliens,bullets)
+    
+    #Verifica se algum alienígena atingiu a parte inferior da tela
+    check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets)
 
 def check_fleet_edges(ai_settings,aliens):
     '''Responde apropriadamente se alguma alineígena alcançou a borda.'''

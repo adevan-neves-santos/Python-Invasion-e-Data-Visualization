@@ -24,4 +24,4 @@ class Star(Sprite):
 
     def update(self):
         '''Atualiza o movimento da estrela cadente.'''
-        self.rect.y+=0.3
+        self.rect.y+=1

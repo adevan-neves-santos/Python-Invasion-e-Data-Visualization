@@ -9,6 +9,7 @@ class Settings():
 
         #Configurações do personagem
         self.person_speed_factor=1.5
+        self.person_limit=3
 
         #Configurações de projéteis
         self.bullet_speed_factor=1

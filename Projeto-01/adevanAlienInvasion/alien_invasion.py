@@ -6,7 +6,7 @@ from ship import Ship
 from pacman import Pacman
 from input_output import ler_dados
 from pygame.sprite import Group
-from star import Star
+from game_stats import GameStats
 
 def run_game(dados):
     # Inicializa as configurações em segundo plano
@@ -16,6 +16,10 @@ def run_game(dados):
     pygame.display.set_caption("Alien Invasion de Adevan Neves!! Bem vindo {}".format(dados["nomeJogador"]))
     #Flag para saber com qual tipo de personagem estamos trabalhando
     eh_pacman=False
+
+    #Cria uma instância para armazenar dados estatísticos do jogo
+    stats=GameStats(ai_settings)
+
 
     #Cria um personagem, seja espaçonave, seja pacman
     if(dados["nomePersonagem"].lower()=='pacman'):
@@ -42,11 +46,13 @@ def run_game(dados):
     # Inicializa o laço principal do jogo
     while True:
         gf.check_events(ai_settings,screen,person,bullets,eh_pacman)
-        person.update()
-        gf.update_bullets(bullets,screen,aliens,ai_settings,person)
-        gf.update_stars(constellation,screen.get_rect(),ai_settings)
-        gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation)
-        gf.update_aliens(ai_settings,aliens)
+        if stats.game_active:
+
+            person.update()
+            gf.update_bullets(bullets,screen,aliens,ai_settings,person)
+            gf.update_stars(constellation,screen.get_rect(),ai_settings)
+            gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation)
+            gf.update_aliens(ai_settings,aliens,person,stats,screen,bullets)
 
 dados=ler_dados()
 run_game(dados)

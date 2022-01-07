@@ -1,6 +1,6 @@
 {
   "nomeJogador": "Jogador 01",
-  "nomePersonagem": "pacman",
-  "corFundo": "qualquer",
+  "nomePersonagem": "ship",
+  "corFundo": "azul",
   "temaEstrela": 1
 }

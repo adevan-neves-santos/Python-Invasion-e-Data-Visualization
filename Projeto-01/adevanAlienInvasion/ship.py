@@ -38,3 +38,6 @@ class Ship():
     
         self.rect.centerx=self.center
         
+    def center_obj(self):
+        '''Centraliza a espaçonave na tela.'''
+        self.center=self.screen_rect.centerx
