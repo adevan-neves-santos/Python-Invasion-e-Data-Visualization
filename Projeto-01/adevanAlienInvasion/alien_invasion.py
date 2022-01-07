@@ -53,7 +53,7 @@ def run_game(dados):
 
     # Inicializa o laço principal do jogo
     while True:
-        gf.check_events(ai_settings,screen,person,bullets,eh_pacman,play_button,stats,aliens)
+        gf.check_events(ai_settings,screen,person,bullets,eh_pacman,play_button,stats,aliens,sb)
         if stats.game_active:
 
             person.update()
