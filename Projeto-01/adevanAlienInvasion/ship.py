@@ -1,7 +1,9 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship():
+class Ship(Sprite):
     def __init__(self,screen,ai_settings,path_image='adevanAlienInvasion/imagens/ship.bmp'):
+        super().__init__()
         '''Inicializa a espaçonave e define sua posição atual.'''
         self.screen=screen
 

@@ -7,11 +7,14 @@ from alien import Alien
 from star import Star
 from time import sleep
 
-def obj_hit(ai_settings,stats,screen,obj,aliens,bullets):
+def obj_hit(ai_settings,stats,screen,obj,aliens,bullets,sb):
     '''Responde ao fato de a espaçonave ter sido atingida por um alienígena.'''
     if(stats.obj_left>0):
         #Decrementa obj_left
         stats.obj_left-=1
+
+        #Atualiza o painel de pontuações
+        sb.prep_ships()
 
         #Esvazia a lista de alienígenas e de projéteis.
         aliens.empty()
@@ -56,6 +59,7 @@ def run_game(stats,ai_settings,screen,obj,aliens,bullets,sb):
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
         #Esvazia a lista de alienígenas e de projéteis
         aliens.empty()
@@ -251,17 +255,17 @@ def get_number_rows(ai_settings,obj_height,alien_height):
     number_rows=int(available_space_y/(2*alien_height))
     return number_rows
 
-def check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets):
+def check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets,sb):
     '''Verifica se algum alienígena alcançou a parte inferior da tela.'''
     screen_rect=screen.get_rect()
 
     for alien in aliens.sprites():
         if(alien.rect.bottom>=screen_rect.bottom):
             #Trata esse caso do mesmo modo que é feito quando a espaçonave é atinginda.
-            obj_hit(ai_settings,stats,screen,obj,aliens,bullets)
+            obj_hit(ai_settings,stats,screen,obj,aliens,bullets,sb)
             break
 
-def update_aliens(ai_settings,aliens,obj,stats,screen,bullets):
+def update_aliens(ai_settings,aliens,obj,stats,screen,bullets,sb):
     '''
     Verifica se a frota está em uma das bordas
       e então atualiza as posições de todos os alienígenas da frota.
@@ -271,10 +275,10 @@ def update_aliens(ai_settings,aliens,obj,stats,screen,bullets):
 
     #Verifica se houve colisões entre alienígenas e a espaçonave
     if pygame.sprite.spritecollideany(obj,aliens):
-        obj_hit(ai_settings,stats,screen,obj,aliens,bullets)
+        obj_hit(ai_settings,stats,screen,obj,aliens,bullets,sb)
     
     #Verifica se algum alienígena atingiu a parte inferior da tela
-    check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets)
+    check_aliens_bottom(ai_settings,stats,screen,obj,aliens,bullets,sb)
 
 def check_fleet_edges(ai_settings,aliens):
     '''Responde apropriadamente se alguma alineígena alcançou a borda.'''

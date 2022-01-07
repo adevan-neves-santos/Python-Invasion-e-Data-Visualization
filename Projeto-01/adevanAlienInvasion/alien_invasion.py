@@ -60,7 +60,7 @@ def run_game(dados):
             gf.update_bullets(bullets,screen,aliens,ai_settings,person,stats,sb)
             gf.update_stars(constellation,screen.get_rect(),ai_settings)
             gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation,play_button,stats,sb)
-            gf.update_aliens(ai_settings,aliens,person,stats,screen,bullets)
+            gf.update_aliens(ai_settings,aliens,person,stats,screen,bullets,sb)
 
 dados=ler_dados()
 run_game(dados)
