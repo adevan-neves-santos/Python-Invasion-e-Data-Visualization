@@ -7,6 +7,7 @@ from pacman import Pacman
 from input_output import ler_dados
 from pygame.sprite import Group
 from game_stats import GameStats
+from button import Button
 
 def run_game(dados):
     # Inicializa as configurações em segundo plano
@@ -19,6 +20,9 @@ def run_game(dados):
 
     #Cria uma instância para armazenar dados estatísticos do jogo
     stats=GameStats(ai_settings)
+
+    #Cria o botão Ṕlay
+    play_button=Button(ai_settings,screen,"Play")
 
 
     #Cria um personagem, seja espaçonave, seja pacman
@@ -45,13 +49,13 @@ def run_game(dados):
 
     # Inicializa o laço principal do jogo
     while True:
-        gf.check_events(ai_settings,screen,person,bullets,eh_pacman)
+        gf.check_events(ai_settings,screen,person,bullets,eh_pacman,play_button,stats,aliens)
         if stats.game_active:
 
             person.update()
             gf.update_bullets(bullets,screen,aliens,ai_settings,person)
             gf.update_stars(constellation,screen.get_rect(),ai_settings)
-            gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation)
+            gf.update_screen(ai_settings,screen,person,aliens,bullets,constellation,play_button,stats)
             gf.update_aliens(ai_settings,aliens,person,stats,screen,bullets)
 
 dados=ler_dados()
