@@ -10,7 +10,9 @@ class GameStats():
         self.game_active=False
         
 
+
     def reset_stats(self):
         '''Inicializa os dados estatísticos que podem mudar durante o jogo.'''
         self.obj_left=self.ai_settings.person_limit
+        self.score=0
         

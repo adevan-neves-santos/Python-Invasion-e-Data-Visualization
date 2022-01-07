@@ -65,6 +65,8 @@ def check_play_button(stats,play_button,mouse_x,mouse_y,ai_settings,screen,obj,a
     '''Inicia um novo jogo quando o jogador clicar em Play.'''
     button_clicked=play_button.rect.collidepoint(mouse_x,mouse_y)
     if button_clicked:
+        #Reinicia as configurações do jogo
+        ai_settings.initialize_dynamic_settings()
         run_game(stats,ai_settings,screen,obj,aliens,bullets)
 
 
@@ -121,7 +123,7 @@ def check_keyup_events(event,obj,eh_pacman):
     elif(event.key==pygame.K_DOWN and (eh_pacman)):
         obj.moving_down=False
 
-def update_screen(ai_settings,screen,obj,aliens,bullets,constellation,play_button,stats):
+def update_screen(ai_settings,screen,obj,aliens,bullets,constellation,play_button,stats,sb):
     '''Atualiza as imagens em tela e alterna para a nova tela.'''
 
     #Redesenha a tela a cada passagem pelo laço
@@ -134,7 +136,10 @@ def update_screen(ai_settings,screen,obj,aliens,bullets,constellation,play_butto
     obj.blitme()
     aliens.draw(screen)
     constellation.draw(screen)
+    #Desenha a informação de pontuação
+    sb.show_score()
 
+    # Desenha o botão d eplay, se o jogo estiver inativo
     if not stats.game_active:
         play_button.draw_button()
 
@@ -154,7 +159,7 @@ def update_stars(constellation,screen,ai_settings):
             constellation.add(new_star)
 
 
-def update_bullets(bullets,screen,aliens,ai_settings,obj):
+def update_bullets(bullets,screen,aliens,ai_settings,obj,stats,sb):
     '''Atualiza  a posição dos projéteis e remove projéteis antigos.'''
     bullets.update()
     #Apagua bullet se ele sumir da tela, economizando o processento desnecessário
@@ -163,16 +168,24 @@ def update_bullets(bullets,screen,aliens,ai_settings,obj):
             bullets.remove(bullet)
     #Verifica se algum projétil atingiu os alienígenas
     #Em caso afirmativo, livra-se do projétil e do alienígena
-    check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets)
+    check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets,stats,sb)
 
-def check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets):
+def check_bullet_alien_collisions(ai_settings,screen,obj,aliens,bullets,stats,sb):
     '''Responde a colisões entre projéteis e alienígenas.'''
     #Remove todo par projetil-nave quando colidem (sobrepoem)
     collision=pygame.sprite.groupcollide(bullets,aliens,True,True)
 
+    if collision:
+        for aliens in collision.values():
+
+            stats.score+=ai_settings.aliens_points*len(aliens)
+            sb.prep_score()
+
     if(len(aliens)==0):
-        #Destrói os projéteis existentes e cria uma nova
+        #Destrói os projéteis existentes, aumenta a velocidade do jogo e cri uma nova frota
+
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings,screen,obj,aliens)
 
 def get_cor(cor):
