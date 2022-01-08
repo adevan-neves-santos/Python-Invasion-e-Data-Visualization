@@ -74,3 +74,5 @@ python3 adevanAlienInvasion/main.py
 ```bash
 python3 adevanAlienInvasion/alien_invasion.py
 ```
+
+## [Tutorial no youtube sobre o jogo](https://youtu.be/gUWD1UExjEA)
