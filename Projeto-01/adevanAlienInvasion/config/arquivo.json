@@ -1,5 +1,5 @@
 {
   "nomeJogador": "Jogador 01",
-  "nomePersonagem": "ship",
-  "corFundo": "cinza"
+  "nomePersonagem": "pacman",
+  "corFundo": "dt"
 }
