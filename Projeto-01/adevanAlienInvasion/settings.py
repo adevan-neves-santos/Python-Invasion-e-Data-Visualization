@@ -5,8 +5,8 @@ class Settings():
         '''Inicializa as configurações estáticas do jogo.'''
 
         #Configurações da tela
-        self.screen_width=1200
-        self.screen_height=700
+        self.screen_width=900#1200
+        self.screen_height=500#700
         #Cor RGB da tela no jogo
         self.bg_color=gf.get_cor(cor)
 

@@ -22,9 +22,6 @@ def run_game(dados):
     #Cria uma instância para armazenar dados estatísticos do jogo
     stats=GameStats(ai_settings)
 
-    #Cria painel de pontução
-    sb=Scoreboard(ai_settings,screen,stats)
-
     #Cria o botão Ṕlay
     play_button=Button(ai_settings,screen,"Play")
 
@@ -35,6 +32,9 @@ def run_game(dados):
         eh_pacman=True
     else:
         person=Ship(screen,ai_settings)
+
+    #Cria painel de pontução
+    sb=Scoreboard(ai_settings,screen,stats,eh_pacman)
 
     #Cria um grupo de estrelas cadente
     constellation=Group()

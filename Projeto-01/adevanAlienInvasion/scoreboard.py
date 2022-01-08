@@ -1,16 +1,18 @@
 import pygame.font
 from pygame.sprite import Group
+from pacman import Pacman
 from ship import Ship
 
 class Scoreboard():
     '''Uma classe para mostrar informações sobre pontuação.'''
 
-    def __init__(self,ai_settings,screen,stats):
+    def __init__(self,ai_settings,screen,stats,eh_pacman):
         '''Inicializa os atributos da pontuação.'''
         self.screen=screen
         self.screen_rect=screen.get_rect()
         self.ai_settings=ai_settings
         self.stats=stats
+        self.eh_pacman=eh_pacman
 
         #Configurações de fonte para as informações de pontuação
         self.text_color=(30,30,30)
@@ -65,8 +67,15 @@ class Scoreboard():
     def prep_ships(self):
         '''Mostra quantas espaçonaves restam.'''
         self.ships=Group()
-        for ship_number in range(self.stats.obj_left):
-            ship=Ship(self.screen,self.ai_settings,)
-            ship.rect.x=10+ship_number*ship.rect.width
-            ship.rect.y=10
-            self.ships.add(ship)
+        if(self.eh_pacman):
+            for ship_number in range(self.stats.obj_left):
+                ship=Pacman(self.screen,self.ai_settings,)
+                ship.rect.x=10+ship_number*ship.rect.width
+                ship.rect.y=10
+                self.ships.add(ship)
+        else:
+            for ship_number in range(self.stats.obj_left):
+                ship=Ship(self.screen,self.ai_settings,)
+                ship.rect.x=10+ship_number*ship.rect.width
+                ship.rect.y=10
+                self.ships.add(ship)
