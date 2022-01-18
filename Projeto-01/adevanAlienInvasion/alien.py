@@ -1,5 +1,6 @@
 import pygame 
 from pygame.sprite import Sprite
+import os
 
 class Alien(Sprite):
     '''Uma classe que representa um único alienígena da frota.'''
@@ -10,7 +11,7 @@ class Alien(Sprite):
         self.ai_settings=ai_settings
 
         #Carrega a imagem do alienígena e define seu atributo rect
-        self.image=pygame.image.load('adevanAlienInvasion/imagens/alien.bmp')
+        self.image=pygame.image.load(os.path.join('adevanAlienInvasion','imagens','alien.bmp'))
         self.rect=self.image.get_rect()
 
         #Inicia cada novo alienígena próximo à parte superior esqeurda da tela

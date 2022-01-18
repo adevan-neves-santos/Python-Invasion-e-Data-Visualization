@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 
 '''
 
@@ -19,12 +20,12 @@ plt.scatter(cinco_cubicos,cinco_cubicos2,s=23,c=cinco_cubicos,cmap=plt.cm.Blues)
 plt.title("Cinco primeiros cúbicos !", fontsize=17)
 plt.xlabel("Números Naturais",fontsize=10)
 plt.ylabel("Seus respectivos cúbicos",fontsize=12)
-plt.savefig("Projeto-02/adevanDataVisualization/cap15Treino/imagens/cinco-primeiros-cubos.png")
+plt.savefig(os.path.join("Projeto-02","adevanDataVisualization","cap15Treino","imagens","cinco-primeiros-cubos.png"))
 plt.show()
 
 plt.scatter(cinco_mil_cubicos,cinco_mil_cubicos2,s=1,edgecolor='none',c=cinco_mil_cubicos,cmap=plt.cm.Reds)
 plt.title("Cinco mil primeiros cúbicos !", fontsize=11)
 plt.xlabel("Números Naturais",fontsize=8)
 plt.ylabel("Seus respectivos cúbicos",fontsize=9)
-plt.savefig("Projeto-02/adevanDataVisualization/cap15Treino/imagens/OutraImagem.png")
+plt.savefig(os.path.join("Projeto-02","adevanDataVisualization","cap15Treino","imagens","OutraImagem.png"))
 plt.show()

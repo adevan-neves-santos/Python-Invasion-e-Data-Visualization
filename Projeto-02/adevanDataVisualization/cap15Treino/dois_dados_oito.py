@@ -1,5 +1,6 @@
 from dado import Dado
 import pygal
+import os
 
 d1=Dado(8)
 d2=Dado(8)
@@ -21,4 +22,4 @@ fig.x_labels=[str(elem) for elem in (list(range(2,d1.numero_lados*3+1)))]
 fig.x_title="Resultados"
 fig.y_title="Frequência de resultados"
 fig.add("D8+D8",frequencias)
-fig.render_to_file("Projeto-02/adevanDataVisualization/cap15Treino/imagens/OitoLadosTresDados.svg")
+fig.render_to_file(os.path.join("Projeto-02","adevanDataVisualization","cap15Treino","imagens","OitoLadosTresDados.svg"))

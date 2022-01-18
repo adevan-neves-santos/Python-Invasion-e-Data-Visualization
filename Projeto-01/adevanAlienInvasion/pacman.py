@@ -1,10 +1,11 @@
 from ship import Ship
 import pygame
+import os
 class Pacman(Ship):
     '''Pacman faz tudo que Ship faz, porém começa no centro da tela e pode atirar para esquerda ou direita
     ,assim como se mover para direita e esquerad também.'''
     def __init__(self,screen,ai_settings):
-        super().__init__(screen,ai_settings,'adevanAlienInvasion/imagens/pacman.bmp')
+        super().__init__(screen,ai_settings,os.path.join('adevanAlienInvasion','imagens','pacman.bmp'))
         '''Colocar o retângulo no centro da tela
         Fiz esta mudança para poder continuar com o preenchimento da tela por aliens
         self.rect.centerx=self.screen_rect.centerx

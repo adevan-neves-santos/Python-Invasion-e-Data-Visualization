@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 from random import randint
+import os
 
 class Star(Sprite):
     '''Representa uma estrela no céu.'''
@@ -10,7 +11,7 @@ class Star(Sprite):
         self.ai_settings=ai_settings
 
         #Carrega a imagem da estrela e define seu atributo rect
-        self.image=pygame.image.load('adevanAlienInvasion/imagens/star.bmp')
+        self.image=pygame.image.load(os.path.join('adevanAlienInvasion','imagens','star.bmp'))
         self.rect=self.image.get_rect()
 
         #O início de cada estrela será aleatório, limitado apenas
