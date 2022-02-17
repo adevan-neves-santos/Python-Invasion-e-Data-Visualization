@@ -227,7 +227,7 @@ def create_fleet(ai_settings,screen,obj,aliens):
             create_alien(ai_settings,screen,aliens,alien_number,row_number)
 
 def create_stars(ai_settings,screen,constellation):
-    for i in range(10):
+    for i in range(3):
         new_star=Star(ai_settings,screen)
         constellation.add(new_star)
 
